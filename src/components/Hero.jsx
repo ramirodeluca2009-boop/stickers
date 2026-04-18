@@ -74,15 +74,15 @@ export default function Hero() {
               <ul className="space-y-3 text-sm md:text-base">
                 <li className="flex items-start gap-3">
                   <span className="text-lg leading-6">✨</span>
-                  <span className="text-gray-300"><strong className="text-white">Stickers económicos</strong> — ideales para uso interior o temporal</span>
+                  <span className="text-gray-300"><strong className="text-white">Stickers económicos</strong> — Ideales para sella bolsas, bolsas y cuadernos. Perfectos para cumpleaños y eventos. Son descartables, de un solo uso y no resistentes al agua.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-lg leading-6">💧</span>
-                  <span className="text-gray-300"><strong className="text-white">Stickers en vinilo</strong> — resistentes al agua, perfectos para notebooks, botellas y más</span>
+                  <span className="text-gray-300"><strong className="text-white">Stickers en vinilo</strong> — Primera opción para termos, celulares y notebooks. Resistentes al agua y al uso diario.</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-lg leading-6">🔥</span>
-                  <span className="text-gray-300"><strong className="text-white">Stickers DTF Premium</strong> — colores intensos, alta definición y máxima durabilidad</span>
+                  <span className="text-gray-300"><strong className="text-white">Stickers DTF Premium</strong> — Colores intensos, alta definición y máxima durabilidad. La opción superior para quienes buscan el mejor acabado.</span>
                 </li>
               </ul>
               <p className="text-gray-400 text-sm md:text-base mt-4">
