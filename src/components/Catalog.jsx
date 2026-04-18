@@ -1,6 +1,14 @@
-import { useState, useRef } from 'react'
-import { BookOpen, Search, X } from 'lucide-react'
+import { useState, useRef, useCallback } from 'react'
+import { BookOpen, Search, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Document, Page, pdfjs } from 'react-pdf'
+import 'react-pdf/dist/Page/AnnotationLayer.css'
+import 'react-pdf/dist/Page/TextLayer.css'
 import ScrollReveal from './ScrollReveal'
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url,
+).toString()
 
 const WHATSAPP_NUMBER = '5492974254894'
 const PDF_URL = '/catalogo-stickersfans.pdf'
@@ -10,6 +18,144 @@ function WhatsAppIcon({ className }) {
     <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
     </svg>
+  )
+}
+
+function MobilePdfViewer({ onClose }) {
+  const [numPages, setNumPages] = useState(null)
+  const [pageNumber, setPageNumber] = useState(1)
+  const [goToInput, setGoToInput] = useState('')
+  const [loading, setLoading] = useState(true)
+  const containerRef = useRef(null)
+
+  const onDocumentLoadSuccess = useCallback(({ numPages }) => {
+    setNumPages(numPages)
+    setLoading(false)
+  }, [])
+
+  const goToPage = (n) => {
+    const page = Math.max(1, Math.min(n, numPages || 1))
+    setPageNumber(page)
+    containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const handleGoTo = () => {
+    const n = parseInt(goToInput, 10)
+    if (!isNaN(n)) {
+      goToPage(n)
+      setGoToInput('')
+    }
+  }
+
+  const handleGoToKeyDown = (e) => {
+    if (e.key === 'Enter') handleGoTo()
+  }
+
+  return (
+    <div className="mb-10" ref={containerRef}>
+      <div className="flex justify-end mb-3">
+        <button
+          onClick={onClose}
+          className="flex items-center gap-2 text-gray-500 hover:text-dark text-sm font-medium transition-colors"
+        >
+          <X size={16} />
+          Cerrar catálogo
+        </button>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+        <div className="flex justify-center py-4 min-h-[400px]">
+          <Document
+            file={PDF_URL}
+            onLoadSuccess={onDocumentLoadSuccess}
+            loading={
+              <div className="flex items-center justify-center py-20">
+                <div className="w-8 h-8 border-3 border-yellow-brand border-t-transparent rounded-full animate-spin" />
+              </div>
+            }
+          >
+            <Page
+              pageNumber={pageNumber}
+              width={Math.min(window.innerWidth - 48, 600)}
+              className="transition-opacity duration-300"
+            />
+          </Document>
+        </div>
+
+        {!loading && numPages && (
+          <div className="border-t border-gray-200 p-4 space-y-3">
+            {/* Navegación */}
+            <div className="flex items-center justify-between gap-3">
+              <button
+                onClick={() => goToPage(pageNumber - 1)}
+                disabled={pageNumber <= 1}
+                className="flex items-center gap-1.5 bg-yellow-brand hover:bg-yellow-hover disabled:opacity-30 disabled:cursor-not-allowed text-dark font-bold px-5 py-3 rounded-xl transition-all min-h-[50px] text-sm"
+              >
+                <ChevronLeft size={18} />
+                Anterior
+              </button>
+
+              <span className="text-sm font-semibold text-dark whitespace-nowrap">
+                Página {pageNumber} de {numPages}
+              </span>
+
+              <button
+                onClick={() => goToPage(pageNumber + 1)}
+                disabled={pageNumber >= numPages}
+                className="flex items-center gap-1.5 bg-yellow-brand hover:bg-yellow-hover disabled:opacity-30 disabled:cursor-not-allowed text-dark font-bold px-5 py-3 rounded-xl transition-all min-h-[50px] text-sm"
+              >
+                Siguiente
+                <ChevronRight size={18} />
+              </button>
+            </div>
+
+            {/* Ir a página */}
+            <div className="flex items-center justify-center gap-2">
+              <span className="text-xs text-gray-500">Ir a página:</span>
+              <input
+                type="number"
+                min={1}
+                max={numPages}
+                value={goToInput}
+                onChange={(e) => setGoToInput(e.target.value)}
+                onKeyDown={handleGoToKeyDown}
+                placeholder="..."
+                className="w-16 text-center py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-yellow-brand/50 focus:border-yellow-brand transition-all"
+              />
+              <button
+                onClick={handleGoTo}
+                className="bg-gray-200 hover:bg-gray-300 text-dark font-semibold px-3 py-2 rounded-lg text-xs transition-colors"
+              >
+                Ir
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function DesktopPdfViewer({ onClose }) {
+  return (
+    <div className="mb-10">
+      <div className="flex justify-end mb-3">
+        <button
+          onClick={onClose}
+          className="flex items-center gap-2 text-gray-500 hover:text-dark text-sm font-medium transition-colors"
+        >
+          <X size={16} />
+          Cerrar catálogo
+        </button>
+      </div>
+      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
+        <iframe
+          src={`${PDF_URL}#toolbar=1&navpanes=0`}
+          title="Catálogo Stickers Fans"
+          className="w-full h-[80vh]"
+        />
+      </div>
+    </div>
   )
 }
 
@@ -32,6 +178,8 @@ export default function Catalog() {
     if (e.key === 'Enter') handlePedir()
   }
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
   return (
     <section id="catalogo" className="py-20 md:py-28 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -46,7 +194,6 @@ export default function Catalog() {
           </div>
         </ScrollReveal>
 
-        {/* Botón ver catálogo */}
         {!showPdf && (
           <ScrollReveal delay={0.1}>
             <div className="flex justify-center mb-12">
@@ -61,29 +208,12 @@ export default function Catalog() {
           </ScrollReveal>
         )}
 
-        {/* Visor PDF */}
         {showPdf && (
-          <div className="mb-10">
-            <div className="flex justify-end mb-3">
-              <button
-                onClick={() => setShowPdf(false)}
-                className="flex items-center gap-2 text-gray-500 hover:text-dark text-sm font-medium transition-colors"
-              >
-                <X size={16} />
-                Cerrar catálogo
-              </button>
-            </div>
-            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-lg">
-              <iframe
-                src={`${PDF_URL}#toolbar=1&navpanes=0`}
-                title="Catálogo Stickers Fans"
-                className="w-full h-[70vh] md:h-[80vh]"
-              />
-            </div>
-          </div>
+          isMobile
+            ? <MobilePdfViewer onClose={() => setShowPdf(false)} />
+            : <DesktopPdfViewer onClose={() => setShowPdf(false)} />
         )}
 
-        {/* Buscador y pedido por código */}
         <ScrollReveal delay={0.15}>
           <div className="max-w-lg mx-auto">
             <div className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-sm">
