@@ -17,6 +17,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <a href="#" className="flex items-center gap-2">
+            <img src="/images/logo.png" alt="StickersFans" className="h-[45px] w-auto rounded-lg mix-blend-multiply" />
             <span className="text-2xl md:text-3xl font-heading font-extrabold tracking-tight text-dark">
               Stickers<span className="text-yellow-brand">Fans</span>
             </span>
@@ -34,7 +35,7 @@ export default function Navbar() {
               </a>
             ))}
             <a
-              href="https://wa.me/5492974000000"
+              href="https://wa.me/5492974254894"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary bg-yellow-brand text-dark font-semibold px-6 py-2.5 rounded-full text-sm"
@@ -75,7 +76,7 @@ export default function Navbar() {
                 </a>
               ))}
               <a
-                href="https://wa.me/5492974000000"
+                href="https://wa.me/5492974254894"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary bg-yellow-brand text-dark font-semibold px-6 py-3 rounded-full text-center text-sm"

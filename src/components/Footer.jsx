@@ -4,6 +4,11 @@ export default function Footer() {
   return (
     <footer className="bg-dark-light border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+        {/* Logo centrado */}
+        <div className="flex justify-center mb-10">
+          <img src="/images/logo.png" alt="StickersFans" className="h-[80px] w-auto rounded-xl" />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* Brand */}
           <div>

@@ -71,7 +71,7 @@ function Modal({ category, onClose }) {
     setTimeout(onClose, 300)
   }
 
-  const whatsappUrl = `https://wa.me/5491100000000?text=${encodeURIComponent(`Hola! Me interesa pedir un diseño de la categoría: ${category.title}`)}`
+  const whatsappUrl = `https://wa.me/5492974254894?text=${encodeURIComponent(`Hola! Me interesa pedir un diseño de la categoría: ${category.title}`)}`
 
   return (
     <div

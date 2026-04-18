@@ -25,7 +25,7 @@ export default function CtaFinal() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="https://ig.me/m/stickersfans1"
+              href="https://instagram.com/stickersfans1"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold px-8 py-4 rounded-full text-base flex items-center gap-3 w-full sm:w-auto justify-center"
@@ -34,7 +34,7 @@ export default function CtaFinal() {
               Escribinos por Instagram
             </a>
             <a
-              href="https://wa.me/5492974000000"
+              href="https://wa.me/5492974254894"
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary bg-green-mate hover:bg-green-dark text-white font-bold px-8 py-4 rounded-full text-base flex items-center gap-3 w-full sm:w-auto justify-center"
